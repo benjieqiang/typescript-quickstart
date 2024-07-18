@@ -1,7 +1,7 @@
 <!--
  * @Author: benjie
  * @Date: 2024-07-18 09:50:04
- * @LastEditTime: 2024-07-18 11:05:58
+ * @LastEditTime: 2024-07-18 17:33:15
  * @LastEditors: benjie
  * @Description: https://www.runoob.com/typescript/ts-install.html
 -->
@@ -717,3 +717,144 @@ console.log(`Square area: ${square.getArea()}`);
 4. **运行**：在 HTML 文件中引用编译后的 JavaScript 文件，并在浏览器中查看结果。
 
 这种模块化的代码组织方式有助于提高代码的可维护性和可重用性，同时避免了全局命名冲突。
+
+
+# react prop
+在 React 中，**prop** 是指用于在组件之间传递数据的一种机制。它是从父组件向子组件传递数据的方式之一。
+
+### 概述
+
+1. **什么是 Prop：**
+   - Prop 是 React 中组件之间通信的一种方式，用于从一个组件（父组件）向另一个组件（子组件）传递数据。
+
+2. **用法：**
+   - 在使用组件时，可以像使用 HTML 属性一样传递 props 给组件。
+
+3. **传递数据：**
+   - 父组件可以通过 props 向子组件传递任何类型的数据，包括字符串、数字、对象、函数等。
+
+### 示例
+
+假设有一个简单的父组件和子组件的例子，演示如何使用 prop 传递数据：
+
+```jsx
+// ParentComponent.js
+
+import React from 'react';
+import ChildComponent from './ChildComponent';
+
+function ParentComponent() {
+  const data = {
+    name: 'John',
+    age: 30,
+  };
+
+  return (
+    <div>
+      <h1>Parent Component</h1>
+      <ChildComponent data={data} />
+    </div>
+  );
+}
+
+export default ParentComponent;
+```
+
+```jsx
+// ChildComponent.js
+
+import React from 'react';
+
+function ChildComponent(props) {
+  // props.data 包含父组件传递过来的数据
+  const { name, age } = props.data;
+
+  return (
+    <div>
+      <h2>Child Component</h2>
+      <p>Name: {name}</p>
+      <p>Age: {age}</p>
+    </div>
+  );
+}
+
+export default ChildComponent;
+```
+
+### 解释
+
+- **ParentComponent：**
+  - 定义了一个名为 `data` 的对象，包含 `name` 和 `age` 字段。
+  - 将 `data` 作为 prop 传递给 `ChildComponent`。
+
+- **ChildComponent：**
+  - 接收一个 `props` 参数，其中包含从父组件传递过来的数据。
+  - 使用解构赋值从 `props.data` 中提取 `name` 和 `age`。
+  - 渲染 `name` 和 `age`。
+
+### 要点
+
+- **单向数据流：** Prop 是单向传递的，即只能从父组件向子组件传递数据，子组件不能直接修改 props。
+- **命名约定：** 通常，props 的名称在组件中以对象的形式传递，并按照惯例使用 `props` 这个名称。
+- **动态传递：** Props 可以是动态的，这意味着你可以根据需要在父组件中更改数据，并将新的数据传递给子组件。
+
+在 React 中，props 是非常重要的概念，它允许你构建可复用、灵活和可组合的组件，从而更好地管理和组织你的应用程序。
+
+#  React 中的 `useState` 钩子
+
+这段代码使用了 React 中的 `useState` 钩子来创建一个名为 `squares` 的状态变量以及一个名为 `setSquares` 的函数，用于更新这个状态变量。让我们逐步解释这段代码的含义：
+
+### 解释
+
+1. **useState 钩子：**
+   - `useState` 是 React 提供的一个钩子，用于在函数组件中添加状态管理能力。
+   - 它接收一个初始状态作为参数，并返回一个包含当前状态值和更新状态的函数的数组。
+
+2. **初始状态：**
+   - `Array(9).fill(null)` 创建了一个包含 9 个元素的数组，并将每个元素初始化为 `null`。
+   - 这个数组作为 `useState` 的初始状态，因此 `squares` 的初始值为 `[null, null, null, null, null, null, null, null, null]`。
+
+3. **解构赋值：**
+   - `const [squares, setSquares] = useState(Array(9).fill(null));` 使用了解构赋值语法，将 `useState` 返回的数组中的第一个元素赋值给 `squares`，将第二个元素赋值给 `setSquares`。
+   - `squares` 是当前的状态值，即包含 9 个 `null` 的数组。
+   - `setSquares` 是一个函数，用于更新 `squares` 的值。
+
+### 使用场景
+
+这段代码常用于游戏开发中，如井字棋（Tic-Tac-Toe）游戏的初始化。通过使用 `useState`，可以在组件中管理游戏板的状态，使得每个方格的状态（如为空、被玩家 X 或玩家 O 占据）可以动态地更新和渲染。
+
+### 示例
+
+以下是一个简单的示例，展示了如何在 React 中使用 `useState` 来管理井字棋游戏的方格状态：
+
+```jsx
+import React, { useState } from 'react';
+
+function TicTacToe() {
+  const [squares, setSquares] = useState(Array(9).fill(null));
+
+  const handleClick = (index) => {
+    if (squares[index] === null) {
+      const newSquares = [...squares]; // 创建一个副本，确保不直接修改原始数组
+      newSquares[index] = 'X'; // 在点击的方格上放置 'X'
+      setSquares(newSquares); // 更新状态
+    }
+  };
+
+  return (
+    <div className="board">
+      {squares.map((value, index) => (
+        <button key={index} onClick={() => handleClick(index)}>
+          {value}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export default TicTacToe;
+```
+
+### 总结
+
+使用 `useState(Array(9).fill(null))` 初始化了一个包含 9 个方格状态的数组，并提供了一个 `setSquares` 函数来更新这些状态。这种模式是 React 中常见的状态管理方式，非常适合用于动态更新和渲染 UI。
